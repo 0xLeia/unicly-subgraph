@@ -1,0 +1,63 @@
+specVersion: 0.0.2
+schema:
+  file: schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: UnicFactory
+    network: mainnet
+    source:
+      address: "0x8696BDE5Cc30545b3b049f3529abBfB2B1e0C007"
+      abi: UnicFactory
+      startBlock: 12142679
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - TokenCreated
+      abis:
+        - name: UnicFactory
+          file: UnicFactory/abis/UnicFactory.json
+        - name: Converter
+          file: UnicFactory/abis/Converter.json
+      eventHandlers:
+        - event: TokenCreated(indexed address,indexed address)
+          handler: handleTokenCreated
+      file: UnicFactory/UnicFactory.wasm
+  - kind: ethereum/contract
+    name: Converter
+    network: mainnet
+    source:
+      abi: Converter
+      startBlock: 12142679
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Approval
+        - OwnershipTransferred
+        - Transfer
+        - BidCreated
+        - BidRemoved
+      abis:
+        - name: Converter
+          file: Converter/abis/Converter.json
+      eventHandlers:
+        - event: Approval(indexed address,indexed address,uint256)
+          handler: handleApproval
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: Deposited(uint256[],uint256[],address)
+          handler: handleDeposited
+        - event: Refunded()
+          handler: handleRefunded
+        - event: Issued()
+          handler: handleIssued
+        - event: BidCreated(address,uint256,uint256)
+          handler: handleBidCreated
+        - event: BidRemoved(address,uint256)
+          handler: handleBidRemoved
+        - event: ClaimedNFT(address,uint256,uint256)
+          handler: handleClaimedNFT
+      file: Converter/Converter.wasm

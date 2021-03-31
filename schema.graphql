@@ -1,0 +1,26 @@
+type TokenEntity @entity {
+  id: ID!
+  name: String!
+  owner: Bytes!
+  decimals: Int!
+  symbol: String!
+  maxSupply: BigInt!
+  bids: [BidEntity!]! @derivedFrom(field: "token")
+}
+
+type BidEntity @entity {
+  id: ID!
+  bidder: Bytes! @search
+  bidAmount: BigInt!
+  nftIndex: BigInt!
+  token: TokenEntity!
+  timestamp: BigInt!
+}
+
+type UnBidEntity @entity {
+  id: ID!
+  bidder: Bytes! @search
+  nftIndex: BigInt!
+  token: TokenEntity!
+  timestamp: BigInt!
+}
